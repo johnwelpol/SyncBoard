@@ -1,0 +1,4 @@
+.next
+src/generated
+PLAN.md
+package-lock.json
