@@ -61,7 +61,9 @@ Features are built one at a time with `/build-feature <number>` (`.claude/comman
 
 Answers to `PLAN.md` §12, filled in as each feature needs them.
 
-- (none yet)
+- **ORM:** Prisma, with PostgreSQL (decided 2026-11-09).
+- **Database:** the developer's own Postgres, configured with `DATABASE_URL` in `.env`. The repo has no docker-compose file.
+- **Ordering:** fractional indexing. `position` columns are text keys, so a move updates one row.
 
 ## Architecture rules from the spec
 
