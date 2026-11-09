@@ -374,13 +374,13 @@ relevant workspace and resource.
 
 ### Phase 1 --- Foundation and Project Setup
 
--   [ ] Create the Next.js App Router project with TypeScript.
--   [ ] Configure linting, formatting, environment variables, and
+-   [x] Create the Next.js App Router project with TypeScript.
+-   [x] Configure linting, formatting, environment variables, and
     project scripts.
--   [ ] Set up Tailwind CSS and the component library.
--   [ ] Configure PostgreSQL and the selected ORM.
--   [ ] Create the initial database schema and migrations.
--   [ ] Add shared validation schemas and error-handling conventions.
+-   [x] Set up Tailwind CSS and the component library.
+-   [x] Configure PostgreSQL and the selected ORM.
+-   [x] Create the initial database schema and migrations.
+-   [x] Add shared validation schemas and error-handling conventions.
 
 **Deliverable:** A running application connected to the database with a
 documented development setup.

@@ -12,9 +12,11 @@ Build feature `$ARGUMENTS` from `PLAN.md`. Follow these steps in order and don't
 3. **Decisions.** If this feature depends on a `PLAN.md` §12 choice that isn't listed under "Decisions" in `CLAUDE.md` (for example ORM at 0, auth provider at 4.1, real-time provider at 4.5, task ordering at 4.4), ask with AskUserQuestion and give a recommendation. Record the answer under Decisions in `CLAUDE.md` and commit it on `main`, so the worktree inherits it.
 
 4. **Worktree.** From the main checkout, run:
+
    ```
    git worktree add .claude/worktrees/<slug> -b feature/<slug> main
    ```
+
    Then call `EnterWorktree` with `path` set to that directory. Don't use `name`: it creates a `worktree-*` branch. Then run `npm install && npx next typegen`. Without typegen, tsc can't find `LayoutProps`/`PageProps`.
 
 5. **Plan.** Use the `superpowers:writing-plans` skill and save the plan to `docs/plans/<slug>.md`. Stop and get the user's approval before writing feature code.

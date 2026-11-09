@@ -32,11 +32,13 @@
 ### Task 1: Test runner, formatting, validation and error conventions
 
 **Files:**
+
 - Create: `vitest.config.mts`, `vitest.setup.ts`, `.prettierrc.json`, `.prettierignore`, `src/lib/action-result.ts`, `src/lib/validation.ts`
 - Test: `src/lib/action-result.test.ts`, `src/lib/validation.test.ts`
 - Modify: `package.json` (deps and scripts)
 
 **Interfaces:**
+
 - Produces (used by every later server action):
   - `type ActionResult<T> = { ok: true; data: T } | { ok: false; error: { code: ActionErrorCode; message: string; fieldErrors?: Record<string, string[]> } }`
   - `type ActionErrorCode = "VALIDATION" | "UNAUTHENTICATED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "INTERNAL"`
@@ -57,12 +59,19 @@
 // src/lib/action-result.test.ts
 it("ok wraps data", () => expect(ok(5)).toEqual({ ok: true, data: 5 }));
 it("fail carries code and message", () =>
-  expect(fail("FORBIDDEN", "No access")).toEqual({ ok: false, error: { code: "FORBIDDEN", message: "No access" } }));
+  expect(fail("FORBIDDEN", "No access")).toEqual({
+    ok: false,
+    error: { code: "FORBIDDEN", message: "No access" },
+  }));
 it("fromZodError maps field errors", () => {
   const r = z.object({ name: nameSchema }).safeParse({ name: "" });
   expect(fromZodError(r.error!)).toEqual({
     ok: false,
-    error: { code: "VALIDATION", message: "Invalid input", fieldErrors: { name: [expect.any(String)] } },
+    error: {
+      code: "VALIDATION",
+      message: "Invalid input",
+      fieldErrors: { name: [expect.any(String)] },
+    },
   });
 });
 
@@ -74,9 +83,11 @@ it("nameSchema trims and bounds", () => {
 });
 it("slugSchema accepts kebab-case only", () => {
   expect(slugSchema.safeParse("acme-team").success).toBe(true);
-  for (const bad of ["Acme", "a", "acme--team", "-acme", "acme_team"]) expect(slugSchema.safeParse(bad).success).toBe(false);
+  for (const bad of ["Acme", "a", "acme--team", "-acme", "acme_team"])
+    expect(slugSchema.safeParse(bad).success).toBe(false);
 });
-it("idSchema rejects empty", () => expect(idSchema.safeParse("").success).toBe(false));
+it("idSchema rejects empty", () =>
+  expect(idSchema.safeParse("").success).toBe(false));
 ```
 
 - [ ] **Step 3: Run** `npm test`. Expected: FAIL (the modules don't exist yet).
@@ -87,11 +98,13 @@ it("idSchema rejects empty", () => expect(idSchema.safeParse("").success).toBe(f
 ### Task 2: shadcn/ui component library
 
 **Files:**
+
 - Create (via CLI): `components.json`, `src/lib/utils.ts`, `src/components/ui/button.tsx`
 - Modify: `src/app/globals.css` (shadcn theme tokens), `src/app/page.tsx`, `src/app/layout.tsx` (metadata title `"SyncBoard"`)
 - Test: `src/components/ui/button.test.tsx`
 
 **Interfaces:**
+
 - Produces: `cn(...inputs: ClassValue[]): string` from `@/lib/utils`, and `Button` from `@/components/ui/button`. Later features add more components with `npx shadcn@latest add <name>`.
 
 - [ ] **Step 1: Write the failing test**
@@ -114,11 +127,13 @@ it("renders a button that responds to clicks", async () => {
 ### Task 3: Prisma schema, migration, DB client and health check
 
 **Files:**
+
 - Create: `prisma.config.ts`, `prisma/schema.prisma`, `prisma/migrations/<ts>_init/migration.sql` (generated, then edited), `src/lib/db.ts`, `src/app/api/health/route.ts`, `.env.example`
 - Test: `src/app/api/health/route.test.ts`
 - Modify: `package.json`, `.gitignore` (add `src/generated/` and `!.env.example`), `eslint.config.mjs` (ignore `src/generated/**`)
 
 **Interfaces:**
+
 - Produces: `db` (a `PrismaClient` singleton) from `@/lib/db`, which is server-only. Model types come from `@/generated/prisma/client`. Later features add tables through new migrations (4.1 adds the auth tables).
 
 - [ ] **Step 1: Install and configure**
@@ -160,7 +175,9 @@ it("returns 200 when the DB answers", async () => {
   expect(await res.json()).toEqual({ ok: true });
 });
 it("returns 503 without leaking the error when the DB fails", async () => {
-  vi.mocked(db.$queryRaw).mockRejectedValue(new Error("password authentication failed for postgresql://u:secret@h"));
+  vi.mocked(db.$queryRaw).mockRejectedValue(
+    new Error("password authentication failed for postgresql://u:secret@h"),
+  );
   const res = await GET();
   expect(res.status).toBe(503);
   expect(await res.json()).toEqual({ ok: false });
